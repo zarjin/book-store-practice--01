@@ -87,3 +87,12 @@ export const userLogout = async (req, res) => {
     return res.status(500).json({ error: "Logout failed" });
   }
 };
+
+export const isAuthentication = async (req, res) => {
+  try {
+    res.status(200).json({ authentication: true });
+  } catch (error) {
+    console.error("isAuthentication error:", error);
+    return res.status(401).json({ authentication: false });
+  }
+};
