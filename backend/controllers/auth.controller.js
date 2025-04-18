@@ -1,79 +1,79 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import userModels from "../models/user.models.js";
+import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
+import userModels from "../models/user.models.js"
 
 export const userRegister = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password } = req.body
   try {
     if (!username || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "All fields are required" })
     }
-    const existingUser = await userModels.findOne({ email });
+    const existingUser = await userModels.findOne({ email })
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exists" })
     }
-    const hashPassword = await bcrypt.hash(password, 10);
+    const hashPassword = await bcrypt.hash(password, 10)
     const user = await userModels.create({
       username,
       email,
       password: hashPassword,
-    });
+    })
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
-    });
+    })
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-    });
+    })
 
     res.status(201).json({
       message: "User registered successfully",
       token,
-    });
+    })
   } catch (error) {
-    console.error("Registration error:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Registration error:", error)
+    res.status(500).json({ message: "Internal Server Error" })
   }
-};
+}
 
 export const userLogin = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body
 
   try {
     if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "All fields are required" })
     }
 
-    const user = await userModels.findOne({ email });
+    const user = await userModels.findOne({ email })
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" })
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password)
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" })
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
-    });
+    })
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-    });
+    })
 
     res.status(200).json({
       message: "User logged in successfully",
       token,
-    });
+    })
   } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Login error:", error)
+    res.status(500).json({ message: "Internal Server Error" })
   }
-};
+}
 
 export const userLogout = async (req, res) => {
   try {
@@ -81,18 +81,18 @@ export const userLogout = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-    });
-    return res.status(200).json({ message: "Logout successful" });
+    })
+    return res.status(200).json({ message: "Logout successful" })
   } catch (error) {
-    return res.status(500).json({ error: "Logout failed" });
+    return res.status(500).json({ error: "Logout failed" })
   }
-};
+}
 
 export const isAuthentication = async (req, res) => {
   try {
-    res.status(200).json({ authentication: true });
+    res.status(200).json({ authentication: true })
   } catch (error) {
-    console.error("isAuthentication error:", error);
-    return res.status(401).json({ authentication: false });
+    console.error("Authentication error:", error)
+    return res.status(401).json({ authentication: false })
   }
-};
+}
