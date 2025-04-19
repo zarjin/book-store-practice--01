@@ -1,7 +1,13 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Link } from "react-router"
-
+import { AuthContext } from "../context/AuthContext"
 export default function Navbar() {
+  const { isAuthenticated, userLogout } = useContext(AuthContext)
+
+  const handleLogout = async () => {
+    await userLogout()
+  }
+
   return (
     <header className='w-full bg-gray-800 shadow-lg'>
       <div className='max-w-7xl mx-auto flex justify-between items-center px-6 py-3'>
@@ -34,18 +40,37 @@ export default function Navbar() {
           </ul>
         </nav>
         <div className='flex space-x-3'>
-          <Link
-            to='/login'
-            className='px-4 py-2 rounded-full bg-white text-indigo-600 font-semibold shadow hover:bg-yellow-300 hover:text-indigo-900 transition-colors duration-200'
-          >
-            Login
-          </Link>
-          <Link
-            to='/register'
-            className='px-4 py-2 rounded-full bg-yellow-300 text-indigo-900 font-semibold shadow hover:bg-white hover:text-indigo-600 transition-colors duration-200'
-          >
-            Register
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link
+                to='/profile'
+                className='px-4 py-2 rounded-full bg-yellow-300 text-indigo-900 font-semibold shadow hover:bg-white hover:text-indigo-600 transition-colors duration-200'
+              >
+                Profile
+              </Link>
+              <button
+                className='px-4 py-2 rounded-full bg-red-600 text-indigo-900 font-semibold shadow hover:bg-white hover:text-indigo-600 transition-colors duration-200'
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to='/login'
+                className='px-4 py-2 rounded-full bg-white text-indigo-600 font-semibold shadow hover:bg-yellow-300 hover:text-indigo-900 transition-colors duration-200'
+              >
+                Login
+              </Link>
+              <Link
+                to='/register'
+                className='px-4 py-2 rounded-full bg-yellow-300 text-indigo-900 font-semibold shadow hover:bg-white hover:text-indigo-600 transition-colors duration-200 ml-2'
+              >
+                Register
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

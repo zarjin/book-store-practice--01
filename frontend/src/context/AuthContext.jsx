@@ -1,22 +1,26 @@
-import { createContext, useEffect, useState } from "react"
 import axios from "axios"
+import { createContext, useEffect, useState } from "react"
+import { toast } from "react-toastify"
 
 export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-  const AUTH_API = import.meta.env.AUTH_URL
+  const AUTH_API = import.meta.env.VITE_AUTH_URL
 
-  const [Authentication, setAuthentication] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const userRegister = async (registerData) => {
     try {
       const { data } = await axios.post(`${AUTH_API}/register`, registerData, {
         withCredentials: true,
       })
-      setAuthentication(true)
-      console.log(data.message)
+      // Check authentication status after registration
+      await isAuthentication()
+      toast.success(data.message)
     } catch (error) {
-      console.log(error)
+      const errorMessage = error.response?.data?.message || error.message
+      toast.error(errorMessage)
+      console.error(errorMessage)
     }
   }
 
@@ -25,29 +29,37 @@ export const AuthProvider = ({ children }) => {
       const { data } = await axios.post(`${AUTH_API}/login`, loginData, {
         withCredentials: true,
       })
-      setAuthentication(true)
-      console.log(data.message)
+      // Check authentication status after login
+      await isAuthentication()
+      toast.success(data.message)
     } catch (error) {
-      console.log(error)
+      const errorMessage = error.response?.data?.message || error.message
+      toast.error(errorMessage)
+      console.error(errorMessage)
     }
   }
 
   const userLogout = async () => {
     try {
       const { data } = await axios.get(`${AUTH_API}/logout`, { withCredentials: true })
-      setAuthentication(false)
-      console.log(data.message)
+      setIsAuthenticated(false)
+      toast.success(data.message)
     } catch (error) {
-      console.log(error)
+      const errorMessage = error.response?.data?.message || error.message
+      toast.error(errorMessage)
+      console.error(errorMessage)
     }
   }
 
   const isAuthentication = async () => {
     try {
-      const { data } = await axios.get(`${AUTH_API}/isAuthentication`, { withCredentialstu: true })
-      setAuthentication(data.authentication)
+      const { data } = await axios.get(`${AUTH_API}/isAuthentication`, {
+        withCredentials: true,
+      })
+      setIsAuthenticated(data.authentication)
     } catch (error) {
-      console.log(error)
+      setIsAuthenticated(false)
+      console.error(error.response?.data?.message || error.message)
     }
   }
 
@@ -56,7 +68,7 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ userRegister, userLogin, userLogout, Authentication }}>
+    <AuthContext.Provider value={{ userRegister, userLogin, userLogout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   )
