@@ -2,9 +2,8 @@ import mongoose from "mongoose"
 
 const bookSchema = new mongoose.Schema(
   {
-    bookImage: {
+    image: {
       type: String,
-      trim: true,
     },
     title: {
       type: String,
@@ -18,7 +17,6 @@ const bookSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: true,
-      min: 0,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -27,10 +25,10 @@ const bookSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // automatically adds `createdAt` and `updatedAt`
+    timestamps: true,
   }
 )
 
-const Book = mongoose.model("Book", bookSchema)
+const bookModels = mongoose.model("Book", bookSchema)
 
-export default Book
+export default bookModels
