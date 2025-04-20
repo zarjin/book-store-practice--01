@@ -4,6 +4,8 @@ import { ToastContainer } from "react-toastify"
 import Navbar from "./components/Navbar"
 import { AuthProvider } from "./context/AuthContext"
 import { BookProvider } from "./context/BookContext"
+import AdminBook from "./pages/AdminBook"
+import BookUpdate from "./pages/BookUpdate"
 import CreateBook from "./pages/CreateBook"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
@@ -22,6 +24,8 @@ export default function App() {
               <Route path='/register' element={<RegisterPage />} />
               <Route path='/login' element={<LoginPage />} />
               <Route path='/create-book' element={<CreateBook />} />
+              <Route path='/update-book/:id' element={<BookUpdate />} />
+              <Route path='/admin-book' element={<AdminBook />} />
             </Routes>
           </BookProvider>
         </AuthProvider>
