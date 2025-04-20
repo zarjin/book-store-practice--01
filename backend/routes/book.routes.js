@@ -7,7 +7,7 @@ import authenticationMiddleware from "../middlewares/authentication.middleware.j
 const bookRouter = express.Router()
 
 bookRouter.post("/create-book", authenticationMiddleware, upload.single("image"), createBook)
-bookRouter.post("/update-book/:id", authenticationMiddleware, upload.single("image"), updateBook)
+bookRouter.put("/update-book/:id", authenticationMiddleware, upload.single("image"), updateBook)
 bookRouter.delete("/delete-book/:id", authenticationMiddleware, deleteBook)
 bookRouter.get("/get-admin-book", authenticationMiddleware, getAdminData)
 bookRouter.get("/get-all-book", authenticationMiddleware, getAllBookData)

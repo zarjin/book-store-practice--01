@@ -18,7 +18,7 @@ export const createBook = async (req, res) => {
 
     await newBook.save()
 
-    res.status(201).json({ message: "Book created successfully", book: newBook })
+    res.status(201).json({ message: "Book created successfully" })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: "Something went wrong. Please try again later." })
