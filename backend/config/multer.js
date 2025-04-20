@@ -1,12 +1,12 @@
 import multer from "multer"
-import { createCloudinaryStorage } from "multer-storage-cloudinary"
+import { CloudinaryStorage } from "multer-storage-cloudinary"
 import cloudinary from "./cloudinary.js"
-const storage = new createCloudinaryStorage({
+const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "book-store-data",
-    format: ["png", "jpg", "jpeg"],
+    folder: "bookStore",
+    allowed_formats: ["png", "jpg", "jpeg"],
   },
 })
-const upload = multer({ storage: storage })
+const upload = multer({ storage })
 export default upload
