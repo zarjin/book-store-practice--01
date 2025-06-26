@@ -8,12 +8,13 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  // Facebook authentication fields
+  // Social authentication fields
   facebookId: { type: String, unique: true, sparse: true },
+  instagramId: { type: String, unique: true, sparse: true },
   profilePicture: { type: String },
   authProvider: {
     type: String,
-    enum: ['local', 'facebook'],
+    enum: ['local', 'facebook', 'instagram'],
     default: 'local'
   },
 })

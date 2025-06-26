@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react"
 import { Link, useNavigate } from "react-router" // Corrected import
 import { AuthContext } from "../context/AuthContext"
+import SocialLogin from "../components/SocialLogin"
 
 export default function RegisterPage() {
   const { userRegister } = useContext(AuthContext)
@@ -92,13 +93,18 @@ export default function RegisterPage() {
           <button
             type='submit'
             disabled={loading}
-            className={`w-full p-3 rounded font-medium ${
+            className={`w-full p-3 rounded font-medium transition-colors duration-200 ${
               loading ? "bg-blue-700 cursor-wait" : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
             {loading ? "Creating Account..." : "Register"}
           </button>
         </form>
+
+        {/* Social Login Component */}
+        <div className='mt-6'>
+          <SocialLogin />
+        </div>
 
         <p className='mt-6 text-center text-gray-400'>
           Already have an account?{" "}
